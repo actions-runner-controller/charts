@@ -1,13 +1,13 @@
-name: Lint and Test Chart
+name: actions-runner-controller Lint and Test Chart
 
 on:
   push:
     paths:
-      - 'charts/**'
+      - 'charts/actions-runner-controller/**'
       - '!charts/actions-runner-controller/.ci'
   pull_request:
     paths:
-      - 'charts/**'
+      - 'charts/actions-runner-controller/**'
   workflow_dispatch:
 
 env:
@@ -33,7 +33,7 @@ jobs:
           wget https://github.com/zegl/kube-score/releases/download/v${{ env.KUBE_SCORE_VERSION }}/kube-score_${{ env.KUBE_SCORE_VERSION }}_linux_amd64 -O kube-score
           chmod 755 kube-score
       - name: Kube-score generated manifests
-        run: helm template  --values charts/.ci/values-kube-score.yaml charts/* | ./kube-score score -
+        run: helm template  --values charts/actions-runner-controller/.ci/values-kube-score.yaml charts/actions-runner-controller/* | ./kube-score score -
               --ignore-test pod-networkpolicy
               --ignore-test deployment-has-poddisruptionbudget
               --ignore-test deployment-has-host-podantiaffinity
@@ -54,12 +54,12 @@ jobs:
       - name: Run chart-testing (list-changed)
         id: list-changed
         run: |
-          changed=$(ct list-changed --config charts/.ci/ct-config.yaml)
+          changed=$(ct list-changed --config charts/actions-runner-controller/.ci/ct-config.yaml)
           if [[ -n "$changed" ]]; then
             echo "::set-output name=changed::true"
           fi
       - name: Run chart-testing (lint)
-        run: ct lint --config charts/.ci/ct-config.yaml
+        run: ct lint --config charts/actions-runner-controller/.ci/ct-config.yaml
 
       - name: Create kind cluster
         uses: helm/kind-action@v1.0.0
@@ -73,4 +73,4 @@ jobs:
         if: steps.list-changed.outputs.changed == 'true'
 
       - name: Run chart-testing (install)
-        run: ct install --config charts/.ci/ct-config.yaml
+        run: ct install --config charts/actions-runner-controller/.ci/ct-config.yaml
