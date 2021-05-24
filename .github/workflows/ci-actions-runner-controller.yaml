@@ -5,9 +5,11 @@ on:
     paths:
       - 'charts/actions-runner-controller/**'
       - '!charts/actions-runner-controller/.ci'
+      - '!**/*.md'
   pull_request:
     paths:
       - 'charts/actions-runner-controller/**'
+      - '!**/*.md'
   workflow_dispatch:
 
 env:
