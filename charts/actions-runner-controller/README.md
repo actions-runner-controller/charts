@@ -8,9 +8,9 @@ Details around the solution are kept in the main repository, if you are a new us
 ## Installation
 **cert-manager**
 
-actions-runner-controller uses [cert-manager](https://cert-manager.io/docs/installation/kubernetes/) for certificate management of Admission Webhook. Make sure you have already installed cert-manager before you install. The installation instructions for cert-manager can be found below.
+actions-runner-controller uses [cert-manager](https://cert-manager.io/docs/installation/kubernetes/) for certificate management of Admission Webhook. Make sure you have already installed cert-manager before you install. The installation instructions for cert-manager with Helm can be found below.
 
-- [Installing cert-manager on Kubernetes](https://cert-manager.io/docs/installation/kubernetes/)
+- [Installing cert-manager on Kubernetes with Helm](https://cert-manager.io/docs/installation/kubernetes/#installing-with-helm)
 
 **actions-runner-controller**
 
