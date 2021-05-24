@@ -17,13 +17,13 @@ jobs:
         id: get_latest_release
         with:
           route: GET /repos/:owner/:repo/releases/latest
-          owner: toast-gear
-          repo: chart-tests
+          owner: actions-runner-controller
+          repo: chart
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Check for Chart Diff
         run: |
-            detected_changes=$(git diff --find-renames --name-only ${{ fromJson(steps.get_latest_release.outputs.data).sha }} -- charts)
+            detected_changes=$(git diff --find-renames --name-only ${{ fromJson(steps.get_latest_release.outputs.data).sha }} -- charts/actions-runner-controller)
             if [[ -z $detected_changes ]]; then
               echo "::error ::No changes detected to the chart since the last chart release"
               exit 1
@@ -35,7 +35,7 @@ jobs:
       - name: Package and Index
         run: |
           mkdir -p release/
-          helm package charts/app -d release/
+          helm package charts/actions-runner-controller -d release/
           release_package_name=$(basename -- release/*.tgz)
           naked_filename="${release_package_name%.*}"
           git checkout gh-pages
