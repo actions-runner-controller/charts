@@ -19,9 +19,9 @@ Before you can deploy the controller you must decide on an authentication method
 Once you have decided on your authentication method and configured your values.yaml file we can start the install process:
 
 ```shell
-# Add the GitHub pages release feed 
+# Add the GitHub Pages release feed 
 helm repo add actions-runner-controller https://actions-runner-controller.github.io/actions-runner-controller
-# Create a namespace for the deployment (skip this if you have one already)
+# Create a namespace to deploy into (skip this if you have one you intend to use already)
 kubectl create namespace actions-runner-system
 # Install the chart into your chosen namespace
 helm upgrade --install --namespace actions-runner-system actions-runner-controller-charts/actions-runner-controller --values values.yaml
@@ -33,10 +33,10 @@ _Default values are documented as of the latest released version of the chart_
 
 | Key                                              | Description                                                                                                                              | Default                              |
 |--------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------|
-| `labels`                                         | Kubernetes custom labels that are applied to all resources in the chart                                                                  |                                      |
-| `replicaCount`                                   | The number of controller pods to deploy                                                                                                  | 1                                    |
+| `labels`                                         | Assign labels to all resources in the chart                                                                                              |                                      |
+| `replicaCount`                                   | Set the number of controller pods                                                                                                        | 1                                    |
 | `syncPeriod`                                     | The period in which the controler will reconcile the number of desired runners                                                           | 10m                                  |
-| `authSecret.create`                              | Deploys the auth secret                                                                                                                  | true                                 |
+| `authSecret.create`                              | Deploy the auth secret                                                                                                                   | true                                 |
 | `authSecret.name`                                | The name of the auth secret                                                                                                              | controller-manager                   |
 | `authSecret.github_app_id`                       | The ID of your GitHub App. **This can't be set at the same time as `authSecret.github_token`**                                           |                                      |
 | `authSecret.github_app_installation_id`          | The ID of your GitHub App installation. **This can't be set at the same time as `authSecret.github_token`**                              |                                      |
@@ -51,10 +51,10 @@ _Default values are documented as of the latest released version of the chart_
 | `imagePullSecrets`                               | Specifies the secret to be used when pulling the controller image                                                                        |                                      |
 | `nameOverride`                                   | Override the resource name prefix	                                                                                                      |                                      |
 | `fullNameOverride`                               | Override the full resource names	                                                                                                      |                                      |	
-| `serviceAccount.create`                          | Creates a service account if enabled                                                                                                     | true                                 |
+| `serviceAccount.create`                          | Deploy the controller pod under a service account                                                                                        | true                                 |
 | `serviceAccont.annotations`                      | Adds annotations to the service account                                                                                                  |                                      |
 | `serviceAccount.name`                            | The name of the service account                                                                                                          |                                      |
-| `podAnnotations`                                 | Adds pod annotations to the controller and webhook server                                                                                |                                      |
+| `podAnnotations`                                 | Add pod annotations to the controller and webhook server                                                                                 |                                      |
 | `podSecurityContext`                             |                                                                                                                                          |                                      |
 | `securityContext`                                |                                                                                                                                          |                                      |
 | `service.type`                                   |                                                                                                                                          |                                      |
@@ -65,11 +65,11 @@ _Default values are documented as of the latest released version of the chart_
 | `autoscaling.maxReplicas`                        |                                                                                                                                          |                                      |
 | `autoscaling.targetCPUUtilizationPercentage`     |                                                                                                                                          |                                      |
 | `autoscaling.targetMemoryUtilizationPercentage`  |                                                                                                                                          |                                      |
-| `nodeSelector`                                   | Sets pod nodeSelector                                                                                                                    |                                      |
-| `tolerations`                                    | Sets pod tolerations                                                                                                                     |                                      |
-| `affinity`                                       | Sets pod affinity rules                                                                                                                  |                                      |
-| `priorityClassName`                              | Sets kubernetes priorityClassName                                                                                                        |                                      |
-| `env`                                            | Environment variables to inject into the controller container                                                                            |                                      |
+| `nodeSelector`                                   | Set the controller pod nodeSelector                                                                                                      |                                      |
+| `tolerations`                                    | Set the controller pod tolerations                                                                                                       |                                      |
+| `affinity`                                       | Set the controller pod affinity rules                                                                                                    |                                      |
+| `priorityClassName`                              | Set the controller pod priorityClassName                                                                                                 |                                      |
+| `env`                                            | Inject environment variables into the controller container                                                                               |                                      |
 | `scope.singleNamespace`                          | Limts the controller to watching a single namespace.                                                                                     | false                                |
 | `scope.watchNamespace`                           | Tells the controller which namespace to watch if `scope.singleNamespace` is true                                                         |                                      |
 | `githubWebhookServer.enabled`                    | Deploy the webhook server                                                                                                                | false                                |
@@ -89,17 +89,16 @@ _Default values are documented as of the latest released version of the chart_
 | `githubWebhookServer.podSecurityContext.fsGroup` |                                                                                                                                          |                                      |
 | `githubWebhookServer.securityContext`            |                                                                                                                                          |                                      |
 | `githubWebhookServer.resources`                  |                                                                                                                                          |                                      |
-| `githubWebhookServer.nodeSelector`               | Sets pod nodeSelector                                                                                                                    |                                      |
-| `githubWebhookServer.tolerations`                | Sets pod tolerations                                                                                                                     |                                      |
-| `githubWebhookServer.affinity`                   | Sets pod affinity rules                                                                                                                  |                                      |
-| `githubWebhookServer.priorityClassName`          | Sets pod priorityClassName                                                                                                               |                                      |
+| `githubWebhookServer.nodeSelector`               | Set the githubWebhookServer pod nodeSelector                                                                                             |                                      |
+| `githubWebhookServer.tolerations`                | Set the githubWebhookServer pod tolerations                                                                                              |                                      |
+| `githubWebhookServer.affinity`                   | Set the githubWebhookServer pod affinity rules                                                                                           |                                      |
+| `githubWebhookServer.priorityClassName`          | Set the githubWebhookServer pod priorityClassName                                                                                        |                                      |
 | `githubWebhookServer.service.type`               |                                                                                                                                          |                                      |
 |                                                  |                                                                                                                                          |                                      |
 | `githubWebhookServer.ingress.enabled`            |                                                                                                                                          | false                                |
 | `githubWebhookServer.ingress.annotations`        |                                                                                                                                          |                                      |
 |                                                  |                                                                                                                                          |                                      |
-|                                                  |                                                                                                                                          |                                                                                       
-
+|                                                  |                                                                                                                                          |                                      |
 ## Advanced Deployments
 
 ### Namespaced Controllers
