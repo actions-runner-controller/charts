@@ -1,4 +1,4 @@
-name: Release Chart
+name: actions-runner-controller Release Chart
 
 on:
   release:
@@ -17,13 +17,13 @@ jobs:
         id: get_latest_release
         with:
           route: GET /repos/:owner/:repo/releases/latest
-          owner: toast-gear
-          repo: chart-tests
+          owner: actions-runner-controller
+          repo: charts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Check for Chart Diff
         run: |
-            detected_changes=$(git diff --find-renames --name-only ${{ fromJson(steps.get_latest_release.outputs.data).sha }} -- charts)
+            detected_changes=$(git diff --find-renames --name-only ${{ fromJson(steps.get_latest_release.outputs.data).sha }} -- charts/actions-runner-controller)
             if [[ -z $detected_changes ]]; then
               echo "::error ::No changes detected to the chart since the last chart release"
               exit 1
@@ -35,11 +35,10 @@ jobs:
       - name: Package and Index
         run: |
           mkdir -p release/
-          helm package charts/app -d release/
+          helm package charts/actions-runner-controller -d release/
           release_package_name=$(basename -- release/*.tgz)
-          naked_filename="${release_package_name%.*}"
           git checkout gh-pages
-          helm repo index --merge index.yaml release/ --url https://github.com/actions-runner-controller/charts/releases/download/${{ github.event.release.tag_name }}/$build_file
+          helm repo index --merge index.yaml release/ --url https://github.com/actions-runner-controller/charts/releases/download/${{ github.event.release.tag_name }}/$release_package_name
           mv release/index.yaml index.yaml
           git add index.yaml
           git commit -m 'Update index.yaml'
