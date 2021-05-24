@@ -29,6 +29,8 @@ helm upgrade --install --namespace actions-runner-system actions-runner-controll
 
 ## Configuration
 
+_Default values are documented as of the latest released version of the chart_
+
 | Key                                              | Description                                                                                                                              | Default                              |
 |--------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------|
 | `labels`                                         | Kubernetes custom labels that are applied to all resources in the chart                                                                  |                                      |
@@ -41,7 +43,7 @@ helm upgrade --install --namespace actions-runner-system actions-runner-controll
 | `authSecret.github_app_private_key`              | The multiline string of your GitHub App's private key. **This can't be set at the same time as `authSecret.github_token`**               |                                      |
 | `authSecret.github_token`                        | Your chosen GitHub PAT token. **This can't be set at the same time as the `authSecret.github_token_app_*`**                              |                                      |
 | `image.repository`                               | The "repository/image" of the controller container                                                                                       | summerwind/actions-runner-controller |
-| `image.dindSidecarRepositoryAndTag`              | The "repository/image" of the dind sidecar container                                                                                     |                                      |
+| `image.dindSidecarRepositoryAndTag`              | The "repository/image" of the dind sidecar container                                                                                     | docker:dind                          |
 | `image.pullPolicy`                               | The pull policy of the controller image                                                                                                  | IfNotPresent                         |
 | `kube_rbac_proxy.enabled`                        | Deploy the kube-proxy container as part of the controller pod. This is used to protect the metrics endpoint                              | true                                 |
 | `kube_rbac_proxy.image.repository`               | The "repository/image" of the kube-proxy                                                                                                 | quay.io/brancz/kube-rbac-proxy       |
@@ -96,4 +98,32 @@ helm upgrade --install --namespace actions-runner-system actions-runner-controll
 | `githubWebhookServer.ingress.enabled`            |                                                                                                                                          | false                                |
 | `githubWebhookServer.ingress.annotations`        |                                                                                                                                          |                                      |
 |                                                  |                                                                                                                                          |                                      |
-|                                                  |                                                                                                                                          |                                             
+|                                                  |                                                                                                                                          |                                                                                       
+
+## Advanced Deployments
+
+### Namespaced Controllers
+
+For large environments which are unable to use the webhook server you may run into rate limiting issues. We provide a few scaling metrics some which scale better than others in terms of API consumption however this may not be enough. In those instances you may wish to deploy multiple controllers, allowing you to use multiple PATs or GitHub App installations, effectively increasing your API rate limit.
+
+We achieve this capability on a single cluster by deploying controllers to their own namespaces and limiting them to that namespace. For example if we wanted to deploy 2 controllers we would set the 2 values.yaml files to:
+
+```yaml
+# values1.yaml
+scope:
+  singleNamespace: true
+  watchNamespace: actions-runner-system-1
+```
+
+`helm upgrade --install --namespace actions-runner-system-1 actions-runner-controller-charts/actions-runner-controller --values values1.yaml`
+
+```yaml
+# values2.yaml
+scope:
+  singleNamespace: true
+  watchNamespace: actions-runner-system-2
+```
+
+`helm upgrade --install --namespace actions-runner-system-2 actions-runner-controller-charts/actions-runner-controller --values values2.yaml`
+
+We then just need to deploy the relevant [runners](https://github.com/actions-runner-controller/actions-runner-controller#usage) for your environment to each namespace.
