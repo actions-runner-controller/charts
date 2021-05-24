@@ -1,0 +1,51 @@
+name: Release Chart
+
+on:
+  release:
+    types: 
+      - published
+jobs:
+  build:
+    name: actions-runner-controller 
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: octokit/request-action@v2.x
+        id: get_latest_release
+        with:
+          route: GET /repos/:owner/:repo/releases/latest
+          owner: toast-gear
+          repo: chart-tests
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Check for Chart Diff
+        run: |
+            detected_changes=$(git diff --find-renames --name-only ${{ fromJson(steps.get_latest_release.outputs.data).sha }} -- charts)
+            if [[ -z $detected_changes ]]; then
+              echo "::error ::No changes detected to the chart since the last chart release"
+              exit 1
+            fi
+      - name: Set git credentials
+        run: |
+          git config --global user.email "actions@users.noreply.github.com"
+          git config --global user.name "GitHub Actions"
+      - name: Package and Index
+        run: |
+          mkdir -p release/
+          helm package charts/app -d release/
+          release_package_name=$(basename -- release/*.tgz)
+          naked_filename="${release_package_name%.*}"
+          git checkout gh-pages
+          helm repo index --merge index.yaml release/ --url https://github.com/actions-runner-controller/charts/releases/download/${{ github.event.release.tag_name }}/$build_file
+          mv release/index.yaml index.yaml
+          git add index.yaml
+          git commit -m 'Update index.yaml'
+          git push origin gh-pages
+      - name: Upload Assets to Release
+        uses: shogo82148/actions-upload-release-asset@v1
+        with:
+          upload_url: ${{ fromJson(steps.get_latest_release.outputs.data).upload_url }}
+          asset_path: "release/*.tgz"
