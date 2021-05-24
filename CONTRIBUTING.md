@@ -1,8 +1,7 @@
 ## How to Contribute
 
 1. Fork this repository, develop, and test your changes
-1. Remember to sign off your commits as described above
-1. Submit a pull request
+2. Submit a pull request
 
 ### Technical Requirements
 
