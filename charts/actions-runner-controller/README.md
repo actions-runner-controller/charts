@@ -17,7 +17,7 @@ actions-runner-controller uses [cert-manager](https://cert-manager.io/docs/insta
 ```shell
 # Add the GitHub pages release feed 
 helm repo add actions-runner-controller https://actions-runner-controller.github.io/actions-runner-controller
-# Deploy the default namespace
+# Deploy the default namespace (this can be a customised as appropriate for your environment)
 kubectl create namespace actions-runner-system
 # Install the chart
 helm upgrade --install --namespace actions-runner-system actions-runner-controller-charts/actions-runner-controller
