@@ -14,13 +14,17 @@ actions-runner-controller uses [cert-manager](https://cert-manager.io/docs/insta
 
 **actions-runner-controller**
 
+Before you can deploy the controller you must decide on an authentication method and configure the chart's parameters in the values.yaml for your settings. See the projects [README.md authentication section](https://github.com/actions-runner-controller/actions-runner-controller#setting-up-authentication-with-github-api) for details about your options and the specifics of each authentication type. See the [Configuration](#Configuration) section for the relevant `authSecret` keys.
+
+Once you have decided on your authentication method and configured your values.yaml file we can start the install process:
+
 ```shell
 # Add the GitHub pages release feed 
 helm repo add actions-runner-controller https://actions-runner-controller.github.io/actions-runner-controller
 # Create a namespace for the deployment (skip this if you have one already)
 kubectl create namespace actions-runner-system
 # Install the chart into your chosen namespace
-helm upgrade --install --namespace actions-runner-system actions-runner-controller-charts/actions-runner-controller
+helm upgrade --install --namespace actions-runner-system actions-runner-controller-charts/actions-runner-controller --values values.yaml
 ```
 
 ## Configuration
