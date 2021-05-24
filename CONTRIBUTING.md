@@ -18,7 +18,6 @@ Chart releases must be immutable. Any change to a chart warrants a chart version
 The chart `version` should follow [semver](https://semver.org/). Any breaking (backwards incompatible) changes to a chart should:
 
 1. Bump the MAJOR version
-2. In the README, under a section called "Upgrading", describe the manual steps necessary to upgrade to the new (specified) MAJOR version
 
 ### Chart Releases
 
