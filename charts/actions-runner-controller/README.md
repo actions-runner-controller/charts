@@ -3,7 +3,7 @@
 The source code for app itself can be found at [actions-runner-controller](https://github.com/actions-runner-controller/actions-runner-controller). The Helm chart implementation of this repository is 
 maintained here.
 
-Details around the solution are kept in the main repository as well as non-helm chart specific issues. If you are a new user of the actions-runner-controller project please familiarise youself with this repository by going through the [README.md](https://github.com/actions-runner-controller/actions-runner-controller/blob/master/README.md). This is also where the usage of the runners themselves are documented and maintained so it is essential you read the README.md to be able to use this chart.
+Details around the solution are kept in the main repository as well as non-helm chart specific issues. If you are a new user of the actions-runner-controller project please familiarise youself with the main repository by going through the [README.md](https://github.com/actions-runner-controller/actions-runner-controller/blob/master/README.md). This is also where the usage of the runners themselves are documented and maintained so it is essential you read the README.md to be able to use this chart.
 
 ## Installation
 **cert-manager**
