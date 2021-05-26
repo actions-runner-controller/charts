@@ -20,7 +20,7 @@ Once you have decided on your authentication method and configured your values.y
 
 ```shell
 # Add the GitHub Pages release feed 
-helm repo add actions-runner-controller https://actions-runner-controller.github.io/actions-runner-controller
+helm repo add actions-runner-controller-charts https://actions-runner-controller.github.io/charts/
 # Create a namespace to deploy into (skip this if you have one you intend to use already)
 kubectl create namespace actions-runner-system
 # Install the chart into your chosen namespace
@@ -97,7 +97,6 @@ _Default values are the defaults set in the charts values.yaml, some properties 
 | `githubWebhookServer.ingress.annotations`                | Set annotations for the ingress kind                                                                                       |                                                                      |
 | `githubWebhookServer.ingress.hosts`                      | Set hosts configuration for ingress                                                                                        | `[{"host": "chart-example.local", "paths": []}]`                     |
 | `githubWebhookServer.ingress.tls`                        | Set tls configuration for ingress                                                                                          |                                                                      |
-
 
 ## Advanced Deployments
 
