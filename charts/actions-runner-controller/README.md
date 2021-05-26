@@ -31,12 +31,14 @@ helm upgrade --install --namespace actions-runner-system actions-runner-controll
 
 _Default values are documented as of the latest released version of the chart_
 
+_Default values are the defaults set in the charts values.yaml, some properties have default configurations in the code for when the property is omitted or invalid_
+
 | Key                                                      | Description                                                                                                                              | Default                                                              |
 |----------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------|
 | `labels`                                                 | Set labels to apply to all resources in the chart                                                                                        |                                                                      |
 | `replicaCount`                                           | Set the number of controller pods                                                                                                        | 1                                                                    |
 | `syncPeriod`                                             | Set the period in which the controler reconciles the desired runners count                                                               | 10m                                                                  |
-| `githubAPICacheDuration`                                 | Set the cache period for API calls                                                                                                       | syncPeriod - 10 seconds                                              |
+| `githubAPICacheDuration`                                 | Set the cache period for API calls                                                                                                       |                                                                      |
 | `authSecret.create`                                      | Deploy the controller auth secret                                                                                                        | true                                                                 |
 | `authSecret.name`                                        | Set the name of the auth secret                                                                                                          | controller-manager                                                   |
 | `authSecret.github_app_id`                               | The ID of your GitHub App. **This can't be set at the same time as `authSecret.github_token`**                                           |                                                                      |
